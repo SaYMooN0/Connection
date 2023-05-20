@@ -10,6 +10,7 @@ namespace Connection.src
         static public event EventStringContainer AddToMsgEvent;
         static public event EventStringContainer AddToCmndsEvent;
         static public event EventStringContainer AddToUsersList;
+        static public event EventStringContainer ConnectionRequest;
 
         static public void ProcessTheCommand(string cmdStr)
         {
@@ -42,12 +43,16 @@ namespace Connection.src
                             AddToUsersList?.Invoke(cmd.sender.ToString());
                             break;
                         }
+                    case CommandType.ConectionRequest:
+                        {
+                            ConnectionRequest?.Invoke(cmd.sender.ToString());
+                            AddToCmndsEvent?.Invoke($"Connection requested by<< " + cmd.sender.ToString() + " >>");
+                            break;
+                        }
                     default: { break; }
 
                 }
             }
-
-
         }
         static private Command ParseTheCommand(string cmdStr)
         {

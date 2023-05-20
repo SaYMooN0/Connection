@@ -43,6 +43,8 @@ namespace Connection.src
         NotCommand,
         ToEveryOneLoading,
         ResponseToOnLoaded,
-
+        ConectionRequest,
+        RequestApproved,
+        RequestRejected,
     }
 }

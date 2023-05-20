@@ -14,7 +14,7 @@
                 Content="Connect" FontSize="34" Foreground="DarkOliveGreen" FontWeight="Bold"/>
         <Border BorderThickness="1" BorderBrush="Black"
                 Canvas.Left="220">
-        <TextBlock x:Name="Msgs"
+            <TextBlock x:Name="Msgs"
                    Height="800" Width="400" 
                    FontSize="20"
                    Background="AliceBlue"/>
@@ -26,10 +26,26 @@
                    FontSize="20"
                    Background="AliceBlue"/>
         </Border>
-        <ListBox x:Name="usersList"
-                 Canvas.Left="10" Canvas.Top="150"
+        <Label Canvas.Left="10" Canvas.Top="150" Width="200"
+               Content="Available" FontSize="26" HorizontalContentAlignment="Center"/>
+        <ListBox x:Name="usersList" MouseDoubleClick="usersList_MouseDoubleClick"
+            Canvas.Left="10" Canvas.Top="190"
+            Height="130" Width="200"
+            Background="AntiqueWhite">
+        </ListBox>
+
+        <Label Canvas.Left="10" Canvas.Top="340" Width="200"
+               Content="Requests" FontSize="26" HorizontalContentAlignment="Center"/>
+        <ListBox x:Name="requestsList"
+                 Canvas.Left="10" Canvas.Top="380"
                  Height="130" Width="200"
                  Background="AntiqueWhite">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Заблокировать" Click="Reject_Click"/>
+                    <MenuItem Header="Согласиться" Click="Approved_Click"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
         </ListBox>
     </Canvas>
 </Window>
