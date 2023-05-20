@@ -9,9 +9,8 @@ namespace Connection
         public MainWindow()
         {
             InitializeComponent();
-            NetworkManager networkManager = NetworkManager.Instance;
-            networkManager.AddToMsgEvent += MsgAdd;
-            networkManager.AddToCmndsEvent += CmdAdd;
+            CommandManager.AddToMsgEvent += MsgAdd;
+            CommandManager.AddToCmndsEvent += CmdAdd;
             
 
         }

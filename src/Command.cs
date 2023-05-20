@@ -8,8 +8,8 @@ namespace Connection.src
         public readonly IPAddress sender;
         public readonly CommandType commandType;
         public readonly string otherInfo;
-        const char divider = '\n';
-        const string commandFlag = "\tCommand\t";
+        public const char divider = '\n';
+        public const string commandFlag = "\tCommand\t";
         public Command(IPAddress reciever, IPAddress sender, CommandType type, string otherInfo)
         {
             this.reciever = reciever;
@@ -42,6 +42,7 @@ namespace Connection.src
     {
         NotCommand,
         ToEveryOneLoading,
+        ResponseToOnLoaded,
 
     }
 }
