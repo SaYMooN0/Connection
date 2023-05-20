@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -14,6 +15,7 @@ namespace Connection.src
         public bool _listening = true;
         private const int _port = 8015;
         static public IPAddress myIP { get; private set; }
+        static public bool receivingOffers { get; private set; }
         
         static NetworkManager() { }
         
@@ -21,7 +23,9 @@ namespace Connection.src
         {
             _udpClient = new UdpClient(_port);
             _listenerThread = new Thread(ReceiveMessage);
-            myIP = Dns.GetHostByName(Dns.GetHostName()).AddressList[0];
+            receivingOffers = true;
+            //getting the ipV4 adress
+            myIP = Dns.GetHostAddresses(Dns.GetHostName()).First(ip => ip.AddressFamily == AddressFamily.InterNetwork);
             _listenerThread.IsBackground = true;
             _listenerThread.Start();
 
@@ -38,6 +42,15 @@ namespace Connection.src
             try { udpClient.Send(messageBytes, messageBytes.Length, endPoint);}
             finally { udpClient.Close(); }
         }
+        internal void SendCommand(Command cmd)
+        {
+            UdpClient udpClient = new UdpClient();
+            udpClient.EnableBroadcast = true;
+            IPEndPoint endPoint = new IPEndPoint(cmd.reciever, _port);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(cmd.getStringToSend());
+            try { udpClient.Send(messageBytes, messageBytes.Length, endPoint); }
+            finally { udpClient.Close(); }
+        }
 
         private void ReceiveMessage()
         {
@@ -46,7 +59,6 @@ namespace Connection.src
             {
                 byte[] receivedBytes = _udpClient.Receive(ref endPoint);
                 string receivedMessage = Encoding.UTF8.GetString(receivedBytes);
-               
                 CommandManager.ProcessTheCommand(receivedMessage);
             }
         }
