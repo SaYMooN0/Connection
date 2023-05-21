@@ -11,7 +11,12 @@
         <Button x:Name="PlayBtn" Click="PlayBtn_Click"
                 Height="130" Width="200" Canvas.Left="10"
                 Background="Chocolate" BorderBrush="DarkOliveGreen" BorderThickness="6" 
-                Content="Connect" FontSize="34" Foreground="DarkOliveGreen" FontWeight="Bold"/>
+                Content="ConnectUDP" FontSize="30" Foreground="DarkOliveGreen" FontWeight="Bold"/>
+        <Button x:Name="PlayBtnTCP" Click="TCP_Click" Visibility="Hidden"
+                Height="130" Width="200"
+                Canvas.Left="10" Canvas.Top="540"
+                Background="Chocolate" BorderBrush="DarkOliveGreen" BorderThickness="6" 
+                Content="ConnectTCP" FontSize="30" Foreground="DarkOliveGreen" FontWeight="Bold"/>
         <Border BorderThickness="1" BorderBrush="Black"
                 Canvas.Left="220">
             <TextBlock x:Name="Msgs"

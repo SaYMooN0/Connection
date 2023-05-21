@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Windows;
 
@@ -11,6 +12,7 @@ namespace Connection.src
         static public event EventStringContainer AddToCmndsEvent;
         static public event EventStringContainer AddToUsersList;
         static public event EventStringContainer ConnectionRequest;
+        static public event EventStringContainer GotConnectionApproved;
 
         static public void ProcessTheCommand(string cmdStr)
         {
@@ -32,7 +34,7 @@ namespace Connection.src
                             {
                                 NetworkManager networkManager = NetworkManager.Instance;
                                 Command cmdToSend = new Command(cmd.sender, NetworkManager.myIP, CommandType.ResponseToOnLoaded);
-                                networkManager.SendCommand(cmdToSend);
+                                networkManager.SendCommandByUPD(cmdToSend);
                                 AddToUsersList?.Invoke(cmd.sender.ToString());
                             }
                             break;
@@ -47,6 +49,16 @@ namespace Connection.src
                         {
                             ConnectionRequest?.Invoke(cmd.sender.ToString());
                             AddToCmndsEvent?.Invoke($"Connection requested by<< " + cmd.sender.ToString() + " >>");
+                            break;
+                        }
+                    case CommandType.RequestRejected:
+                        {
+                            AddToCmndsEvent?.Invoke($"Your request was rejected by << " + cmd.sender.ToString() + " >>");
+                            break;
+                        }
+                    case CommandType.RequestApproved:
+                        {
+                            GotConnectionApproved?.Invoke(cmd.sender.ToString());
                             break;
                         }
                     default: { break; }

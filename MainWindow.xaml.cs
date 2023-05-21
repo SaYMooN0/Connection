@@ -17,12 +17,27 @@ namespace Connection
             CommandManager.AddToUsersList += AddToUsers;
             CommandManager.ConnectionRequest += ConnectionRequestGot;
             networkManager.SendAllOnLoaded();
+            networkManager.ConnectionEstablished += ConnectionEstablished;
         }
 
+        private void ConnectionEstablished(object? sender, System.EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                PlayBtnTCP.Visibility = Visibility.Visible;
+                PlayBtn.Visibility = Visibility.Hidden;
+            });
+        }
+
+        private void TCP_Click(object sender, RoutedEventArgs e)
+        {
+            Command command = new Command(IPAddress.Broadcast, NetworkManager.myIP, CommandType.NotCommand, "Hello from btn by " + NetworkManager.myIP.ToString());
+            networkManager.TCPSend(command);
+        }
         private void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
             Command command = new Command(IPAddress.Broadcast, NetworkManager.myIP, CommandType.NotCommand, "Hello from btn by " + NetworkManager.myIP.ToString());
-            networkManager.SendCommand(command);
+            networkManager.SendCommandByUPD(command);
 
         }
         public void MsgAdd(string s)
@@ -43,7 +58,7 @@ namespace Connection
             if (selectedItem != null)
             {
                 Command command = new Command(IPAddress.Parse(selectedItem.ToString()), NetworkManager.myIP, CommandType.ConectionRequest);
-                networkManager.SendCommand(command);
+                networkManager.SendCommandByUPD(command);
             }
         }
         private void Reject_Click(object sender, RoutedEventArgs e)
@@ -66,6 +81,10 @@ namespace Connection
             {
                 var user = requestsList.SelectedItem as string;
                 MessageBox.Show("Connection with " + user);
+                IPAddress ip = IPAddress.Parse(user);
+                Command command = new Command(ip, NetworkManager.myIP, CommandType.RequestApproved);
+                networkManager.SendCommandByUPD(command);
+                networkManager.RunTCPServer(ip);
             }
             else
                 MessageBox.Show("Choose 1 user");
@@ -85,6 +104,5 @@ namespace Connection
                 requestsList.Items.Add(s);
             });
         }
-
     }
 }
