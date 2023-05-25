@@ -68,12 +68,14 @@ namespace Connection
             if (requestsList.SelectedItem != null || requestsList.SelectedItems.Count > 1)
             {
                 var user = requestsList.SelectedItem as string;
-                MessageBox.Show("You blocked " + user);
+                Command cmd = new Command(IPAddress.Parse(user), NetworkManager.myIP, CommandType.RequestRejected);
+                networkManager.SendCommandByUPD(cmd);
+                requestsList.Items.Remove(requestsList.SelectedItem);
+
             }
             else
                 MessageBox.Show("Choose 1 user");
         }
-
         private void Approved_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuItem;
